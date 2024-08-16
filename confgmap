@@ -1,0 +1,63 @@
+apiVersion: V1
+kind: ConfigMap
+metadata:
+    name: game-demo
+data:
+  # property-like Keys; each key maps to a simple value
+  player_intial-lives: "3"
+ui_properties_file_name: "user-interface.properties"
+
+#file-like keys
+game.properties: |
+  enemy.types=aliens,monsters
+  player.maximum-lives=5
+user-interface.properties: |
+  color.good=purple
+  color.bad=yellow
+  allow.textmode=true
+
+
+  
+Use a configmap to Configure a container inside a pod
+    -inside a cointainer commands and args
+    -environment variables for a container 
+    -add a file in read-only volume, for the application to read
+    -write a code to run inside the pod that uses the kubernetes API to read a configMap
+
+Kubelet uses the data from configmap when it launches containers for a pod
+application can subscribe to get updates whenever the configMap changes.
+
+apiVersion: v1
+kind: pod
+metadata:
+    nanme: configmap-demo-pod
+spec:
+    -name: demo
+      image: alpine
+      command: ["sleep", "3600"]
+env:
+    #define the environment variable
+  -name: PLAYER_INITIAL_LIVES
+  valueFrom:
+        configMapRef:
+          name: game-demo
+          key: player_intial_lives
+        -name: UI_PROPERTIES_FILE_NAME
+        valueFrom: 
+              name: game-demo
+              key: ui_properties_file_name
+  volumeMounts:
+    -name: config
+      mountPath: "/config"
+      readOnly: true
+  volumes: 
+# you set volumes at the pod level, then mount them containers inside that podf
+    -name: config
+      configMap: 
+          name: game-demo
+            items:
+          -key: "game.properties"
+           path: "game.properties"
+          -key: "user-interface.properties"
+           path" "user-interface.properties"
+  
