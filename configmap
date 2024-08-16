@@ -6,7 +6,6 @@ data:
   # property-like Keys; each key maps to a simple value
   player_intial-lives: "3"
 ui_properties_file_name: "user-interface.properties"
-
 #file-like keys
 game.properties: |
   enemy.types=aliens,monsters
@@ -26,6 +25,34 @@ Use a configmap to Configure a container inside a pod
 
 Kubelet uses the data from configmap when it launches containers for a pod
 application can subscribe to get updates whenever the configMap changes.
+to use ConfigMap in a volume in a pod:
+    1. create a configmap or use an existing one., mulitple pods can reference the same configmap
+    2. modify you pod definition to add a volument under .spec.volumes[].
+        name the volument anything and have a.spec.volumes[].configmap.name to set reference your configmap object.
+    3. add a .spec.containers[].volumeMounts[] to each container that needs the configMap
+    4. modify your image or command so that the programs looks for files in that directory. each key in the configMap data
+        becomes the filename under mountPath.
+
+
+
+apiVersion: V1
+kind: pod
+metadata: 
+    name: mypod
+spec: 
+    containers:
+        -name: mypod
+        image: redis
+        VolumeMounts:
+        -name: foo
+         mountPath: "/etc/foo"
+         readOnly: true
+    volumes:
+        -name: foo
+         configMap:
+                name: myconfigmap
+
+
 
 apiVersion: v1
 kind: pod
@@ -60,4 +87,8 @@ env:
            path: "game.properties"
           -key: "user-interface.properties"
            path" "user-interface.properties"
-  
+
+
+Immutable ConfigMaps 
+immutable: true
+
