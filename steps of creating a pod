@@ -1,0 +1,12 @@
+what is a POD
+the smalles unit of compute
+containers in a pod can communicate with each other using ipc
+POD can encapsulate application, it dependencies, shared storage and networking
+kubectl run nginx --image=nginx
+kubectl get pods 
+kubectl logs pod/nginx
+kubectl get pods -o wide 
+kubectl delete pod/nginx
+kubectl apply -f combined.yaml 
+kubectl decribe pod/my-pod
+
