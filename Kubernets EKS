@@ -1,0 +1,16 @@
+kubernetes components
+  master
+  node
+what components helps master control the nodes 
+  container runtime -present in both master nad node -CRI
+  - etcd 
+  - scheduler
+  - api server 
+    - controller manager 
+  - cloud controler manager - aws 
+
+what components present in the nodes 
+ -kubectl 
+  -CRI
+  -kube proxy 
+
