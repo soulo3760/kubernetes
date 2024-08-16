@@ -10,7 +10,36 @@ what components helps master control the nodes
   - cloud controler manager - aws 
 
 what components present in the nodes 
- -kubectl 
+ -kubelet
   -CRI
   -kube proxy 
+
+APi server
+exposes k8s api which are required to interact with kubernetes
+it has tools like kubekindle
+etcd =  highly available key value database, stores cluster data- master and node, ip address, names...
+
+Kube-scheduler
+distributes the container across nodes
+newly created nodes and assign container to them. 
+
+Controller manager 
+noticing when nodes go down
+respond to the containers, nodes and endpointts to make decision to bring up new node or what to do
+node controller, replication controller, endpoint controller, service accountant controller
+
+cloud controller manager 
+usually not present on prem scenarios, this contains logic related to AWS providers GKE, EKS
+here we find ... 
+Node controller 
+router controller 
+service controller 
+
+
+NODE ARCHITERCTURE
+CRI- underlyig software that runs the underlying kubernetes compoennets such as Docker, rocker, containerd
+Kubelet-  agent that runs every node cluster
+    - containers are running in a pod and on the node itself 
+  Kubeproxy -  network node that makes the network rules on the cluster- for instnace communication within outside the node
+
 
