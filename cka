@@ -97,6 +97,40 @@ TASK 6
 create a persistent volument of 2 gb rw no storage class defined
 
 
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+.,....................................................................
+CREATE STATIC POD named my-static-pod-pod in namespace default on cluster3-master1
+it shoudl be of image nginx:1.16-alpine and have resource requests for 10m cpu and 20m memory.
 
+create a nodeport service NAMED my-static-pod-service which exposes the static pod on port 80 and check if it has 
+Endpoints and if its reachable through the cluster3-master1 internal ip address,
+connect to the internal nodes ips from your main terminal
 
+kubectl config use-context K8s-c3-CCC
+ssh cluster3-master1
+cd /etc/kubernetes/manifests/
+kubectl run my-static-pod-pod -n default --image=nginx:1.16-alpine --dry-run=client -o yaml
+vi my-static-pod-pod.yaml
+##resource requests on memory and cpu
+resources:
+  requests:
+    memory: "10mu"
+    cpus; "20mu"
 
+kubectl get pods -n default
+kubectl describe pods my-static-pod-pod-cluster3-master1
+kubectl expose pod -n default my-static-pod-pod-cluster3-master1 --port=80 --type=nodePort --dry-run=client -0 yaml
+kubectl expose pod -n default my-static-pod-pod-cluster3-master1 --name=static-pod-service --port=80 --type=nodePort --dry-run=client -0 yaml
+
+# we can execute directly on the terminal without the --dry-run=client-o yaml 
+so we get static-pod-service is now exposed
+#to verify we use
+kubectl get svc -n default
+kubectl get ep -n default
+kubectl get pods -n defaultmy-static-pod-pod-cluster3-master1 -o wide
+lets assume the ip add of the node is 10.32.0.4
+lets ping it 
+kubectl -n default exec -it my-static-pod-pod-cluster3-master1 --ping 10.32.0.4
+
+we should work on ndlookup 
