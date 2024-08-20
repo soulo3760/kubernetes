@@ -119,11 +119,31 @@ k run manual-scheduler2 --image=httpd:2.4-alpine  --dry-run=client -o yaml > 9.y
 vi 9.yaml 
   edit specs: 
    add nodeName: cluster2-worker1
-k get pods manyal-scheduler2 -o wide --watch ===# verifification that it is running 
+k get pods manual-scheduler2 -o wide --watch ===# verifification that it is running 
 
 
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,...
+
+task 10 ## service account processor, create a  role role bidning, configmaps and secrets
+kubectl config use-context k8s-c2-H
+kubectl create sa processor --namespace project-hamster  ## service account processor created
+kubectl get sa -n project-hamster  ### verify 
+kubectl create role processor -n project-hamster --verb=create --resource=secrets,configmaps -h
+kubectl get role -n project-hamster
+
+kubectl describe role -n project-hamster
+
+kubectl create rolebinding processor -n project-hamster --serviceaccount=project-hamster:processor --role=processor
+
+kubectl get rolebinding.rbac.authorization.k8s.io -n project-hamster
+kubectl describe rolebinding.rbac.authorization.k8s.io -n project-hamster
+
+## auth can -i create secret -- as project.hamster:processor --namespace project-hamster
+## auth can -i create configmaps -- as project.hamster:processor --namespace project-hamster
+## auth can -i create pods -- as project.hamster:processor --namespace project-hamster
+
+....
 .,....................................................................
 TASK 21 
 CREATE STATIC POD named my-static-pod-pod in namespace default on cluster3-master1
@@ -159,4 +179,19 @@ lets assume the ip add of the node is 10.32.0.4
 lets ping it 
 kubectl -n default exec -it my-static-pod-pod-cluster3-master1 --ping 10.32.0.4
 
-we should work on ndlookup 
+### should work on nslookup .................
+......................................
+..........................................................
+......................................
+......
+question 16---===create a new namespace 
+name space resources
+highest number of roles defined in it 
+
+kubectl config use-context k88-c1-H
+kubectl create ns cka-master
+kubectl get ns  ## verify name space
+kubectl api-resources --namespaced -o name > /opt/course/19/resources.txt
+kubectl get ns 
+kubectl get roles -n project-hamster --no-headers | wc -l
+cat file...
