@@ -93,6 +93,9 @@ echo ' kubectl get pods -A --sort-by=metadata.creationTimestamp
 kubectl get nodes -A --sort-by=metauid
 
 
+TASK 6
+create a persistent volument of 2 gb rw no storage class defined
+
 
 
 
