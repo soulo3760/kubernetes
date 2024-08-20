@@ -34,3 +34,66 @@ kubectl get pods -n default pod1
 kubectl get pods -n default pod1 -o wide 
 #we should see master node 
 
+
+TASK 3
+kubectl config use-context k8s-c1-H
+# lets see all the nodes running in this namespace 
+kubectl get all -n project-c13
+#to scale down on the replicas
+kubectl scale statefulset -n project-c13 03db --replicas=1
+#verfiy 
+kubectl get pods -n project-c13 | grep -i 03db
+
+TASK 4
+Create a pod named ready if service exists
+kubectl run ready-if-service-ready -n default --image=nginx:1.16.1-alpine --dry-run=client -o yaml
+kubectl run ready-if-service-ready -n default --image=nginx:1.16.1-alpine --dry-run=client -o yaml > 4.yaml
+#configure liveness prob
+add this to the yaml under the containers specifications
+vi 4.yamlre
+
+ livenessprobe:
+  exec:
+    command: 
+        - 'true'
+readinessProbe:
+ exec:
+    command: 
+        - 'sh'    #invoke sheell
+        - '-c'    # command 
+        - 'wget -T2 -0- https://services-am-i-ready:80'
+vi 4.yaml
+kubectl create -f 4.yaml
+kubectl get pods -n default ready-if-service-ready
+#if it is still not running for some reasons
+lets describe the pod
+kubectl describe pods -n default ready-if-service-ready
+# it is not able to reach port 80 despite it running
+
+## CREATE ANOTHER POD 
+kubectl run am-i-ready -n default --image=nginx:1.16.1-alpine --labels='id=cross.server-ready'
+#there is aother service existing with another pod
+lets check on this 
+kubectl svc -n default service-am-i-ready
+kubectl get ep -n default
+# you should see endpoints if the pods are running
+kubectl get pods -n default am-i-ready -o wide
+# we can see the ip address
+kubectl describe pods -n default am-i-ready -o wide
+
+
+TASK 5
+kubectl config use-context k8s-c1-H
+# sort pods by the metadata
+ kubectl get pods -A --sort-by=metadata.creationTimestamp
+
+echo ' kubectl get pods -A --sort-by=metadata.creationTimestamp
+' > /opt/course/find_pods.sh
+# sort by metauid
+kubectl get nodes -A --sort-by=metauid
+
+
+
+
+
+
