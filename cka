@@ -1,0 +1,36 @@
+question 1 killer.sh
+k alias kubectl
+open firefox 
+open two tabs
+open kubernetes documentation
+
+TASK ONE
+writing contexts into a file 
+kubectl config get-contexts
+kubectl config get-context -o name
+  kubectl config get-context -o name > /opt/contexts
+
+  # write a command using kubectl 
+  echo "kubectl config current-context" > /opt/course/context_default_kubectl.sh
+  # write the same command without use of kubectl
+
+  kube config file used to 
+  
+cat /opt/course/l/context_default_kubectl.sh
+cat -/.kube/config | grep -I current-context
+
+TASK 2
+  execute this in a different context
+
+kubectl config use-context k8s-c1-H
+now lets create a pod
+kubectl run -n default pod1 --image=httpd:2.4.41-alpine --dry-run=client -o yaml > 2.yaml
+kubectl get nodes
+#copy the name of the master node
+#lets create the pod
+kubectl create -f 2.yaml
+#
+kubectl get pods -n default pod1
+kubectl get pods -n default pod1 -o wide 
+#we should see master node 
+
