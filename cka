@@ -96,10 +96,36 @@ kubectl get nodes -A --sort-by=metauid
 TASK 6
 create a persistent volument of 2 gb rw no storage class defined
 
+TASK 9
+kubectl config use-context k8s-c2-AC
+ssh cluster-master1  # master node
+k get pods -n kube-system | grep -i kube-scheduler
+cd /etc/kubernetes/manifests
+mv ./kube.scheduler.yaml ../
+kubectl run manual-schedule --image=httpd:2.22.01-alpine 
+kubectl get po mannual-schedule
+
+lets schedule that pod on cluster cluster2.master1 and make sure it is running
+mv ../kube.scheduler.yaml ./
+k get po -n kube-system | grep -i kube-scheduler
+k get po -n kube-system --watch | grep -i kube-scheduler
+k get po manual-schedule
+
+## create a second pod- worker node
+cd ../../../../
+k run manual-scheduler2 --image=httpd:2.4-alpine  --dry-run=client -o yaml 
+
+k run manual-scheduler2 --image=httpd:2.4-alpine  --dry-run=client -o yaml > 9.yaml
+vi 9.yaml 
+  edit specs: 
+   add nodeName: cluster2-worker1
+k get pods manyal-scheduler2 -o wide --watch ===# verifification that it is running 
+
 
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 .,....................................................................
+TASK 21 
 CREATE STATIC POD named my-static-pod-pod in namespace default on cluster3-master1
 it shoudl be of image nginx:1.16-alpine and have resource requests for 10m cpu and 20m memory.
 
