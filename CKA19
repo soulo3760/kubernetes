@@ -1,0 +1,7 @@
+###
+we need to know the reosurces in the namespace jupiter
+K -n jupiter get all
+to change the service which is by default clusterIp to nodePort 
+k -n jupiter edit svc <id>
+## we add nodeport:  just below the targetport and then chnage cluster type to NodePort
+### 
