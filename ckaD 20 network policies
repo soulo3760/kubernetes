@@ -1,0 +1,45 @@
+exit
+ssh CKAD7326
+clear
+# there are two deployments exposed inside the cluster using services in namespace Venus
+create a newtwork policy called NP1which restricts outgoing tcp connection from deployment frontend and only
+allow those going to deployment api. Make sure the network policy still allows outgoing traffic on UDP/TCP ports 53 for 
+DNS resolution.
+  test using wget www.google.com,  wget api:2222 from a pod of deployment frontend.
+.............................
+  ................................
+    .........................
+      .............................
+
+  kubectl  -n venus get all
+
+### services, nodes, deployment, replicasets
+....................................
+      ...................................
+              ....................
+
+  apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: NP1
+  namespace: venus
+spec:
+  podSelector:
+    matchLabels:
+      role: frontend
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+    podSelector:
+    matchLabels:
+      role: frontend
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+
+
+  
