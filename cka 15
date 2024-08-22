@@ -1,0 +1,22 @@
+kubectl config use-context k8s-c3-H
+
+kubectl get events
+
+echo "kubectl get events -A --sort-by=metadata.creationTimestamp" > /opt/courses/cluster_events.sh
+
+kubectl get pods -o wide -n kube-system | grep -i kube-proxy  ## to get the worker pod
+## :::::to kill kube-proxy pod we use the following command::::
+  
+kubectl delete pod <name of the worker pod> -n kube-system
+
+kubectl get pods -o wide -n kube-system | grep -i kube-proxy
+
+### ::::
+  to kill containerd container of the kube-proxy Pod on node cluster2-worker1 and write the events  into an 
+/opt/courses/15/container_kill.log
+we use the following command::::
+we start by ssh into the node
+ssh cluster1-worker1
+  crictl ps
+crictl rm <id of the kubeproxy containerd id>
+  
