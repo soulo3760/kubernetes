@@ -1,0 +1,46 @@
+kubectl config use-context k8s-c1-H
+kubectl create deployment deploy-important -n project-tiger --replicas=3 --image=nginx:1.17.6-alpine --dry-run=client -o yaml >12.yaml
+vi 12,yaml
+
+kubectl create -f 12.yaml
+
+under the 
+spec:
+  containers:
+    -image: nginx:1.17.6-alpine
+    -name: container1
+    -image: kubernetes/pause
+    -name: container2
+adjust the metadata labels for id in labels and the selector matchlabels... also under spec adjust replicas
+..
+  there should onlu one pod of that deployment running on one worker node . We have two worker nodes,cluster1 worker and cluster2 worker.
+  becasue we have 3 replicas, the result should be that on both nodes one pod is running, the third pod wont be scheduled unless a new worker node is added
+in a way we kind of simulate the behaviour of the daemonset but using a deployment an fixed number of replicas.
+  ....
+  to achieve this we use pod affinity
+apiVersion: v1
+kind: Pod
+metadata:
+  name: with-node-affinity
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In
+            values:
+            - antarctica-east1
+            - antarctica-west1
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: another-node-label-key
+            operator: In
+            values:
+            - another-node-label-value
+  containers:
+  - name: with-node-affinity
+    image: registry.k8s.io/pause:2.0
