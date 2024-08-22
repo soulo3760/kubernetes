@@ -1,0 +1,19 @@
+incorrect path set for kubelet: /usr/local/bin/kubelet
+correctiuve measures....
+......................................
+........................................
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ssh into worker cluster1
+ps aux | grep -i kubelet
+
+service kubelet status
+
+cat /etc/system/system.d/kubelet.service.d/10-kubeadm.conf
+
+whereis kubelet
+usr/bin/kubelet
+systemctl daemon-reload && systemctl restart kubelet
+
+service kubelet status
+
+kubectl get nodes 
