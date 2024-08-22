@@ -11,14 +11,46 @@ DNS resolution.
     .........................
       .............................
 
-  kubectl  -n venus get all
+
+1). 
+k -n venus get all
+ we see 2 api pods and 4 pods for frontend
+we also have 2 servces for them 
+
+2). we are going to test 
+k -n venus run tmp  --restart=never --rm -i --image=busybox -i -- wget -0 frontend:80
+k -n venus run tmp --restart=never --rm -i --image=busybox -i -- wget -0- api:2222
+
+NOTE::
+--: Indicates the end of kubectl options and the start of the command to be executed inside the container.
+.........
+..............
+..................
+.................................
+
+1. 
+exception for TCP/UDP 53 
+
+kubectl -n venus run tmp --restart=never --rm -i --image=busybox -- wget -o- www.google.com
+this confirms it can connect to outside world
+k -n venus run tmp  --restart=never --rm -i --image=busybox -i -- wget -0 frontend:80
+k -n venus run tmp --restart=never --rm -i --image=busybox -i -- wget -0- api:2222
+you can connect to each of the services 
+
+k -n venus exec frontend-6d6-588nx -- wget -o- api:2222
+///
+kubectl -n venus exec frontend-6d6-588nx -c <container-name> -- wget -O- http://api:2222
+///
+trying to execute a command inside an existing pod named frontend-6d6-588nx in the venus namespace using kubectl exec 
+this helps proves that there is no network policy hindering communication between existing pods in the namespace.
 
 ### services, nodes, deployment, replicasets
 ....................................
       ...................................
               ....................
 
-  apiVersion: networking.k8s.io/v1
+
+apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: NP1
@@ -26,7 +58,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      role: frontend
+      id: api
   policyTypes:
     - Egress
   egress:
@@ -35,11 +67,15 @@ spec:
     podSelector:
     matchLabels:
       role: frontend
-      ports:
+    - ports:
         - protocol: TCP
           port: 53
         - protocol: UDP
           port: 53
 
 
-  
+kubectl create -f 20_np.yaml
+kubectl describe -n venus netpol np1
+
+k -n venus exec frontend-6d6-588nx -- wget -O- -T 3 api:2222
+
