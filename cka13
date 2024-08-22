@@ -10,5 +10,24 @@ Metadata:
   namespace: default
 spec:
   containers:
-  image: nginx:1.17.6-alpine
-  name: C1
+   image: nginx:1.17.6-alpine
+   name: C1
+   env:
+      name: MY_NODE_NAME
+      valueFrom: 
+        fieldRef: 
+          fieldPath: spec.nodeName
+
+   image: busybox:1.31.1 
+   name: C2
+   command:
+  -"sh"
+  -"c"
+  -"while true, do date >> /your/vol/path/date.log: sleep 1; done"
+ image: busybox:1.31.1 
+   name: C3
+   command:
+  -"sh"
+  -"c"
+  -"tail -f /your/vol/path/date.log"
+
