@@ -40,4 +40,15 @@ spec:
           requests:
             cpu: 10m
             memory: 10Mi
-       
+
+
+
+kubectl get ds -n project-tiger # check if any daemon sets exists under the project tiger
+kubectl -f create 11.yaml
+
+kubectl get ds -n project-tiger
+
+kubectl get nodes 
+
+kubectl get daemonsets.apps -n project-tiger -o wide 
+
