@@ -30,4 +30,6 @@ spec:
   -"sh"
   -"c"
   -"tail -f /your/vol/path/date.log"
+### define volument mount and hostpaths and mounts
 
+kubectl exec multi-container-playground  -c --cat /var/log/your/log.txt
