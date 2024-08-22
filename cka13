@@ -1,1 +1,14 @@
+kubectl run multi-container-playground -n default --image=nginx:1.17.6-alpine --dry-run=client -o yaml _13.yaml
+vi 13.yaml
 
+ApiVersion: 1
+Kind: pod
+Metadata: 
+  labels:
+    run: multi-container-playground
+  name: multi-container-playground
+  namespace: default
+spec:
+  containers:
+  image: nginx:1.17.6-alpine
+  name: C1
