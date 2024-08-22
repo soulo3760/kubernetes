@@ -1,1 +1,2 @@
 
+kubectl config use-context K8s-C1-H 
