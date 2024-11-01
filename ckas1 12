@@ -44,3 +44,51 @@ spec:
   containers:
   - name: with-node-affinity
     image: registry.k8s.io/pause:2.0
+
+
+
+
+####################
+#################################
+##########################
+#################
+##########
+######
+###
+#
+K -n earth get pvc
+k -n earth describe pod
+k -n earth get pods
+ls -lrt
+vi dockerfile
+
+## build image using docker named registry.killer.sh:5000/sun-cipher
+sudo docker build -t registry.killer.sh:5000/sun-cipher:latest -t registry.killer.sh:5000/sun-cipher:vi-docker .
+#inspect the build images
+sudo docker image ls 
+## push the images 
+sudo docker push registry.killer.sh:5000/sun-cipher:latest 
+sudo docker push registry.killer.sh:5000/sun-cipher:vi-docker
+
+#### build image using podman named registry.killer.sh:5000/sun-cipher
+sudo podman build -t registry.killer.sh:5000/sun-cipher:vi-podman . 
+#inspect the build images
+ podman image ls
+## push the images 
+podman push registry.killer.sh:5000/sun-cipher:vi-podman
+
+
+### run a container using podman and keep running in backfround named sun-cipher
+using image registry.killer.sh:5000/sun-cipher:vi-podman  run container from .. candidate@cka99041 and 
+not root@ka9904
+
+podman run -d --name sun-cipher registry.killer.sh:5000/sun-cipher:vi-podman
+
+
+#### write the logs your container produced into the /opt/course/11/logs 
+write a list of running podman containers into /opt/course/11/containers on cka99042
+
+podman logs sun-cipher > /opt/course/11/logs 
+podman ps -a > /opt/course/11/containers
+
+
